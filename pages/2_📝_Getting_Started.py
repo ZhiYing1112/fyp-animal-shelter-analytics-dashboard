@@ -21,7 +21,6 @@ variable_descriptions = {
     'intake_type': 'Type of intake (e.g., stray, owner surrender, etc.)',
     'intake_date_time': 'Date of intake of the animal',
     'outcome_date_time': 'Date of outcome (e.g., adoption date, transfer date, etc.)',
-    'days_in_shelter': 'Number of days the animal was in the shelter',
     'outcome_type': 'Type of outcome (e.g., adoption, transfer, etc.)'
 }
 
@@ -33,13 +32,19 @@ st.table(table_data)
 
 
 st.subheader('Upload your animal shelter dataset')
-cleaned_data = dip.upload_file_and_check_variables()
-if cleaned_data is not None:
-    st.write('Number of rows: ', cleaned_data.shape[0], ',  Number of columns: ', cleaned_data.shape[1])
-    st.write('Column names: ', ', '.join(cleaned_data.columns))
+uploaded_data = dip.upload_file_and_check_variables()
+if uploaded_data is not None:
+    st.write('Number of rows: ', uploaded_data.shape[0], ',  Number of columns: ', uploaded_data.shape[1])
+    st.write('Column names: ', ', '.join(uploaded_data.columns))
+    st.subheader('Data Preprocessing')
 
-st.subheader('Data Preprocessing')
-dip.data_preprocessing(cleaned_data)
+    if st.button('Click to clean the data'):
+        cleaned_data = dip.data_preprocessing(uploaded_data)
+        st.dataframe(cleaned_data.head(5))
+
+
+# create a button to download sample dataset
+
 
 # st.dataframe(cleaned_data.head(5))
 # if uploaded_data is not None:
