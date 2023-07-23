@@ -1,9 +1,17 @@
 import streamlit as st
 import pandas as pd
-import data_import_preprocessing as dip
+import data_functions as dip
+
+st.set_page_config(
+    page_title="Getting Started",
+    page_icon="🐾",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 
 # This part is about the file upload and data preprocessing part
-st.header('Getting Started 🐾')
+st.title('Getting Started 🐾')
 st.write('This page will guide you through the process of uploading your animal shelter dataset, and making sure it is ready for analysis and prediction.')
 # I want to show the relevant variables in a table
 st.subheader('Relevant Variables')
@@ -41,6 +49,9 @@ if uploaded_data is not None:
     if st.button('Click to clean the data'):
         cleaned_data = dip.data_preprocessing(uploaded_data)
         st.dataframe(cleaned_data.head(5))
+        st.success('Data cleaning completed! 🎉')
+        st.markdown('<p style="color:#30E5F7;font-size:20px;">Navigate yourself to the dashboard to view data insights ✨📊</p>', unsafe_allow_html=True)
+        st.session_state['cleaned_data'] = cleaned_data
 
 
 # create a button to download sample dataset

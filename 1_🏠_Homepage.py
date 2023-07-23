@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
-from joblib import load
+
 
 st.set_page_config(
     page_title="FYP: Animal Shelter Adoption Prediction App",
