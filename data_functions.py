@@ -58,9 +58,9 @@ def data_preprocessing(data):
         # st.write('breed_test', len(transformed_data['breed']))
 
 
-        if transformed_data['gender'].str.lower().str.contains('neutered|spayed|intact').any():
-            transformed_data[['new_gender', 'intact_status']] = transformed_data['gender'].apply(separate_gender_and_intact_status).apply(pd.Series)
-            transformed_data.drop(['gender'], axis=1, inplace=True)
+        # if transformed_data['gender'].str.lower().str.contains('neutered|spayed|intact').any():
+        #     transformed_data[['new_gender', 'intact_status']] = transformed_data['gender'].apply(separate_gender_and_intact_status).apply(pd.Series)
+        #     transformed_data.drop(['gender'], axis=1, inplace=True)
 
         final_data = transform_data(transformed_data)
 
@@ -75,11 +75,14 @@ def data_preprocessing(data):
         # After preprocessing is complete, update the progress bar and status text
         progress_bar.empty()
         status_text.text("Data preprocessing complete!")
+
         return final_data
 
 
 def transform_data(data):
-    # st.write('breed', len(data['breed']))
+
+    data[['new_gender', 'intact_status']] = data['gender'].apply(separate_gender_and_intact_status).apply(pd.Series)
+
     data[['new_breed', 'is_mix_breed']] = data['breed'].apply(separate_breed).apply(pd.Series)
 
     # st.write('new_breed', len(data['new_breed']))
@@ -87,16 +90,16 @@ def transform_data(data):
     data['is_multicolour'] = data.apply(update_multicolour, axis=1)
     data[['is_black', 'is_white', 'is_brown', 'is_yellow', 'is_gray']] = data['colour'].apply(lambda x: separate_colour_columns(x)).apply(pd.Series)
         
-    data.drop(['breed', 'colour'], axis=1, inplace=True)
+    data.drop(['gender','breed', 'colour'], axis=1, inplace=True)
 
     data['outcome_type'] = data.pop('outcome_type')
     data['intake_type'] = data['intake_type'].str.lower()
     data['animal_type'] = data['animal_type'].str.lower()
     data['outcome_type'] = data['outcome_type'].str.lower()
-    data['gender'] = data['gender'].str.lower()
+    data['intake_condition'] = data['intake_condition'].str.lower()
     final_data = data.reset_index(drop=True)
     # rename the columns
-    final_data.rename(columns={'new_breed': 'breed', 'new_colour': 'colour'}, inplace=True)
+    final_data.rename(columns={'new_breed': 'breed', 'new_colour': 'colour', 'new_gender': 'gender'}, inplace=True)
 
     return final_data
 
@@ -109,18 +112,15 @@ def change_data_type_calc_metrics(data):
     total_num_intakes = data['intake_type'].count()
     # num_adoptions is when outcome_type is adoption
     total_num_adoptions = data[data['outcome_type'] == 'Adoption']['outcome_type'].count()
-    # intake_animal_count is the number of animals in the shelter
-    intake_animal_count = data['animal_id'].nunique()
     # save_rate is Intake minus Euthanasia Outcomes divided by num Intake
-    num_euthanasia = data[data['put_to_sleep'] == True]['put_to_sleep'].count()
+    num_euthanasia = data[data['outcome_type'] == 'Euthanasia']['outcome_type'].count()
     save_rate = (total_num_intakes - num_euthanasia) / total_num_intakes
     # live_release_rate is the number of live outcomes divided by the number of intakes
-    num_death_in_shelter = data[data['died_off_shelter'] == True]['animal_id'].count()
+    num_death_in_shelter = data[data['outcome_type'] == 'Died']['outcome_type'].count()
     live_release_rate = (total_num_intakes - num_death_in_shelter) / total_num_intakes
 
     st.session_state['total_num_intakes'] = total_num_intakes
     st.session_state['total_num_adoptions'] = total_num_adoptions
-    st.session_state['intake_animal_count'] = intake_animal_count
     st.session_state['save_rate'] = save_rate
     st.session_state['live_release_rate'] = live_release_rate
 
@@ -146,19 +146,18 @@ def initial_preprocessing(data):
 
         data = change_data_type_calc_metrics(data)
 
-
         data = data.sort_values(by=['animal_id', 'intake_date_time', 'outcome_date_time'], ascending=[True, False, False])
         
-        data = data.groupby('animal_id').head(1)
+        # data = data.groupby('animal_id').head(1)
         
-        relevant_vars = ['animal_id', 'intake_date_time', 'breed', 'colour', 'animal_type', 'age', 'gender', 'outcome_date_time', 
-                         'outcome_type', 'intake_type']
+        # relevant_vars = ['animal_id', 'intake_date_time', 'breed', 'colour', 'animal_type', 'age', 'gender', 'outcome_date_time', 
+        #                  'outcome_type', 'intake_type']
     
-        data = data.drop(columns=[col for col in data.columns if col not in relevant_vars])
+        # data = data.drop(columns=[col for col in data.columns if col not in relevant_vars])
 
         data = remove_missing_data(data)
 
-        data = data.drop(data[data['outcome_date_time'] < data['intake_date_time']].index, axis=0)
+        # data = data.drop(data[data['outcome_date_time'] < data['intake_date_time']].index, axis=0)
 
         # Filter the data to only have animal_type dog and cat
         data = data[data['animal_type'].str.lower().isin(['dog', 'cat'])]
@@ -205,29 +204,6 @@ def data_transformation(data):
     # st.write(data.head(3))
     return data
 
-def tranform_column(data):
-    # Cleaning gender
-    # if data['gender'] contains any string of neutered, spayed, or intact then only perform this function
-    data[['new_gender', 'intact_status']] = data['gender'].apply(separate_gender_and_intact_status).apply(pd.Series)
-
-    data[['new_breed', 'is_mix_breed']] = data['breed'].apply(separate_breed).apply(pd.Series)
-            
-
-    data[['new_colour', 'is_multicolour']] = data['colour'].apply(separate_colour).apply(pd.Series)
-    data['is_multicolour'] = data.apply(update_multicolour, axis=1)
-    data[['is_black', 'is_white', 'is_brown', 'is_yellow', 'is_gray']] = data['colour'].apply(lambda x: separate_colour_columns(x)).apply(pd.Series)
-                
-    # Drop the original columns
-    data.drop(['gender', 'breed', 'colour'], axis=1, inplace=True)
-
-    # Move the outcome type column to the last column
-    data['outcome_type'] = data.pop('outcome_type')
-
-    # lower case all the columns
-    data['intake_type'] = data['intake_type'].str.lower()
-    data['animal_type'] = data['animal_type'].str.lower()
-    data['outcome_type'] = data['outcome_type'].str.lower()
-    return data
 
 def separate_gender_and_intact_status(value):
     value = value.lower()
