@@ -7,7 +7,6 @@ import re
 import plotly.express as px
 import plotly.graph_objects as go
 import time
-from tqdm import tqdm
 from joblib import load
 from dateutil import parser
 from sklearn.preprocessing import LabelEncoder
