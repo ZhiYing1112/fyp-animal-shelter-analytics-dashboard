@@ -38,6 +38,7 @@ variable_descriptions = {
     'breed': 'Breed of the animal',
     'colour': 'Color of the animal',
     'gender': 'Gender of the animal (e.g., male, female)',
+    'intact_status': 'Intact status of the animal (e.g., intact, neutered, spayed)',
     'intake_type': 'Type of intake (e.g., stray, owner surrender, etc.)',
     'intake_date_time': 'Date of intake of the animal',
     'outcome_date_time': 'Date of outcome (e.g., adoption date, transfer date, etc.)',
@@ -65,14 +66,4 @@ if uploaded_data is not None:
         st.markdown('<p style="color:#2FA4FF;font-size:20px;">Navigate yourself to the dashboard to view data insights ✨📊</p>', unsafe_allow_html=True)
         st.session_state['cleaned_data'] = cleaned_data
 
-
-# create a button to download sample dataset
-
-
-# st.dataframe(cleaned_data.head(5))
-# if uploaded_data is not None:
-#     st.write('Preview of the uploaded dataset:')
-#     st.write('Number of rows: ', uploaded_data.shape[0], ',  Number of columns: ', uploaded_data.shape[1])
-#     st.dataframe(uploaded_data.head(10))
-    
     
