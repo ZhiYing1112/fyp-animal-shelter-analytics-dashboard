@@ -47,15 +47,14 @@ def upload_file_and_check_variables():
 def data_preprocessing(data):
     
     if data is not None:
-
-        initial_cleaning_data = initial_preprocessing(data)
-
-        transformed_data = data_transformation(initial_cleaning_data)
-        
-        final_data = transform_data(transformed_data)
-
         progress_bar = st.progress(0)
         status_text = st.empty()
+
+        initial_cleaning_data = initial_preprocessing(data)
+        transformed_data = data_transformation(initial_cleaning_data)
+        final_data = transform_data(transformed_data)
+        
+
         for percent_complete in range(1, 101):
             progress_bar.progress(percent_complete)
             status_text.text(f"Preprocessing data: {percent_complete}% Complete")

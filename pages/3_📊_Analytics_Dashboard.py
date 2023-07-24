@@ -29,7 +29,7 @@ def main_function():
         
 
         dip.card_metrics(total_num_intakes, total_num_adoptions, save_rate, live_release_rate)
-        plot_graphs_cleaned_data(shelter_data)
+        dip.plot_graphs_cleaned_data(shelter_data)
         st.session_state['analytics_dashboard_shelter_data'] = shelter_data
 
         
