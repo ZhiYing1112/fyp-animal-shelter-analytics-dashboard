@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import data_functions as dip
+import base64
 
 st.set_page_config(
     page_title="Getting Started",
@@ -14,6 +15,17 @@ st.set_page_config(
 st.title('Getting Started 🐾')
 st.write('This page will guide you through the process of uploading your animal shelter dataset, and making sure it is ready for analysis and prediction.')
 # I want to show the relevant variables in a table
+
+sample_dataset = dip.load_dataset_from_repo()
+
+# Display the button to download the dataset in the sidebar
+st.sidebar.markdown("### Sample Dataset:")
+st.sidebar.write("Try out this app with the sample dataset 👇")
+if sample_dataset is not None:
+    csv = sample_dataset.to_csv(index=False)
+    if st.sidebar.download_button("Download Sample Dataset", data=csv, key="download", help="Click to download the sample dataset.", file_name="sample_dataset.csv" ):
+        st.sidebar.success('File downloaded successfully.')
+
 st.subheader('Relevant Variables')
 st.info('Note: Your dataset need to have the following variables, and make sure you rename the columns accordingly. ')
 

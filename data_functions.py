@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import time
 import re
+import base64
 import plotly.express as px
 import plotly.graph_objects as go
 import time
@@ -1126,3 +1127,11 @@ def plot_cat_dog_breed_colour(shelter_data):
         st.plotly_chart(fig9)
         st.plotly_chart(fig10)
 
+
+
+
+# Function to load dataset from GitHub repository
+def load_dataset_from_repo():
+    testing_data_url = 'https://raw.githubusercontent.com/ZhiYing1112/fyp-animal-shelter-analytics-dashboard/main/testing_sample_data.csv'
+    df = pd.read_csv(testing_data_url)
+    return df
