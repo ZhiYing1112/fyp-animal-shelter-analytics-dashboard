@@ -32,17 +32,6 @@ def main_function():
         dip.plot_graphs_cleaned_data(shelter_data)
         st.session_state['analytics_dashboard_shelter_data'] = shelter_data
 
-        
-        if st.session_state.get('prediction_data') is not None:
-            shelter_data = st.session_state.get('analytics_dashboard_shelter_data')
-            total_num_intakes = st.session_state.get('total_num_intakes')
-            total_num_adoptions = st.session_state.get('total_num_adoptions')
-            save_rate = st.session_state.get('save_rate')
-            live_release_rate = st.session_state.get('live_release_rate')
-            dip.card_metrics(total_num_intakes, total_num_adoptions, save_rate, live_release_rate)
-            dip.plot_graphs_cleaned_data(shelter_data)
-
-
     else:
         st.info('Note: The below shows the sample data for demonstration purposes only. Please upload your own dataset at "📝 Getting Started" Page.')
         st.write('')
