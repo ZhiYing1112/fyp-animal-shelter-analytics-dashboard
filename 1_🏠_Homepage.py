@@ -56,7 +56,7 @@ st.write('''
          ''')
 st.write('')
 # st.markdown('Head on to the sidebar to get started! 🐾')
-st.markdown('<p style="color:#30E5F7;font-size:20px;">Head on to the sidebar to get started! 🐾</p>', unsafe_allow_html=True)
+st.markdown('<p style="color:#2FA4FF;font-size:20px;">Head on to the sidebar to get started! 🐾</p>', unsafe_allow_html=True)
 st.markdown('---')
 st.markdown('<p style = "font-size: 14px;">Created by 👩‍💻: YEE ZHI YING (TP055495), Data Analytics Final Year student at APU.</p>', unsafe_allow_html=True)
 # create a link to my linkedin profile

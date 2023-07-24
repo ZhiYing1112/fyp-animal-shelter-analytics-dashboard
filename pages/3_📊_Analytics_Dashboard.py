@@ -21,18 +21,18 @@ def main_function():
     if st.session_state.get('cleaned_data') is not None:
         total_num_intakes = st.session_state.get('total_num_intakes')
         total_num_adoptions = st.session_state.get('total_num_adoptions')
-        intake_animal_count = st.session_state.get('intake_animal_count')
-        save_rate = st.session_state.get('save_rate')
-        live_release_rate = st.session_state.get('live_release_rate')
+        # intake_animal_count = st.session_state.get('intake_animal_count')
+        # save_rate = st.session_state.get('save_rate')
+        # live_release_rate = st.session_state.get('live_release_rate')
         shelter_data = st.session_state.get('cleaned_data')
 
-        dip.card_metrics(total_num_intakes, total_num_adoptions, intake_animal_count, save_rate, live_release_rate)
+        dip.card_metrics(total_num_intakes, total_num_adoptions)
         dip.plot_graphs_cleaned_data(shelter_data)
 
     else:
         st.info('Note: The below shows the sample data for demonstration purposes only. Please upload your own dataset at "📝 Getting Started" Page.')
         st.write('')
-        dip.card_metrics(34578, 6790, 31092, 0.89124, 0.881378)
+        dip.card_metrics(34578, 6790)
         dip.plot_graphs_sample(pd.read_csv('austin_sample_data.csv'))
 
 
