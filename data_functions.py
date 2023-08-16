@@ -736,11 +736,10 @@ def plot_graphs_cleaned_data(df):
 
 # Prediction functions
 def adoption_prediction(df):
-    shelter_data = st.session_state.get('cleaned_data')
 
-    shelter_data.drop(['outcome_type'], axis=1, inplace=True)
+    df.drop(['outcome_type'], axis=1, inplace=True)
 
-    prediction_data = shelter_data.copy()
+    prediction_data = df.copy()
 
     # intake_condition and intact_status are not present in this dataset
     prediction_data = prediction_data[['animal_type', 'intake_type', 'is_multicolour', 'is_black', 'is_yellow', 'is_gray', 'age', 'age_group', 'gender', 'days_in_shelter', 'outcome_month', 'outcome_year', 'intake_condition', 'intact_status']]
@@ -782,26 +781,26 @@ def adoption_prediction(df):
     adoptability_scores = prediction_proba[:, 1]
 
     # Add the binary predictions and adoptability scores to the DataFrame
-    shelter_data['binary_prediction'] = binary_prediction
-    shelter_data['adoptability_score'] = adoptability_scores
+    df['binary_prediction'] = binary_prediction
+    df['adoptability_score'] = adoptability_scores
 
     # Map binary predictions to "adoption" and "not_adoption" for the outcome_type column
-    shelter_data['outcome_type'] = shelter_data['binary_prediction'].apply(lambda x: 'adoption' if x == 1 else 'not_adoption')
+    df['outcome_type'] = df['binary_prediction'].apply(lambda x: 'adoption' if x == 1 else 'not_adoption')
 
     # Define the mapping of month numbers to English month names
     month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     # Map the numeric values to their corresponding English month names
-    shelter_data['outcome_month_eng'] = shelter_data['outcome_month'].map({month: month_names[month - 1] for month in shelter_data['outcome_month']})
+    df['outcome_month_eng'] = df['outcome_month'].map({month: month_names[month - 1] for month in df['outcome_month']})
 
     # Find the index of the 'outcome_month' column
-    outcome_month_idx = shelter_data.columns.get_loc('outcome_month')
+    outcome_month_idx = df.columns.get_loc('outcome_month')
 
     # Insert the 'outcome_month_eng' column beside the 'outcome_month' column
-    shelter_data.insert(outcome_month_idx + 1, 'outcome_month_eng', shelter_data.pop('outcome_month_eng'))
+    df.insert(outcome_month_idx + 1, 'outcome_month_eng', df.pop('outcome_month_eng'))
     # st.write(shelter_data.head(3))
 
-    return shelter_data
+    return df
 
 def convert_object_to_category(df):
     # Create an empty list to store the column names
